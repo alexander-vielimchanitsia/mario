@@ -8,6 +8,10 @@
     "build": "webpack-dev-server",
     "build:prod": "webpack -p"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexander-vielimchanitsia/mario.git"
+  },
   "author": "Alexander Vielimchanitsia",
   "license": "MIT",
   "devDependencies": {
