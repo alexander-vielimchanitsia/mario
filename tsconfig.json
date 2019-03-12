@@ -1,0 +1,14 @@
+// TODO: is it possible to make async&await correctly work with `"target": "es5"` ?
+// TODO: there's a problem with the trace in a browser's console when there's an error
+{
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "downlevelIteration": true,
+    "module": "commonjs",
+    "target": "es6",
+    "allowJs": true,
+    "lib": ["es6", "dom", "es2017"]
+  }
+}

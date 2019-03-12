@@ -1,0 +1,12 @@
+# npm
+node_modules/
+
+# logs stuff
+*.log
+
+# MacOS
+.DS_Store
+
+# IDE
+.idea/
+*.sublime-*

@@ -1,0 +1,33 @@
+{
+  "name": "mario",
+  "version": "0.1.0",
+  "description": "Super-Mario Game",
+  "main": "game.js",
+  "scripts": {
+    "test": "mocha -r ts-node/register -r jsdom-global/register tests/**/*.test.ts",
+    "build": "webpack-dev-server",
+    "build:prod": "webpack -p"
+  },
+  "author": "Alexander Vielimchanitsia",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.5",
+    "array-includes": "^3.0.3",
+    "chai": "^4.2.0",
+    "css-loader": "^0.28.4",
+    "eslint": "^5.10.0",
+    "jsdom": "13.1.0",
+    "jsdom-global": "3.0.2",
+    "mocha": "^5.2.0",
+    "style-loader": "^0.18.2",
+    "ts-loader": "^5.3.1",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.3",
+    "typescript-eslint-parser": "^21.0.2",
+    "webpack": "^4.27.1",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10"
+  },
+  "dependencies": {}
+}

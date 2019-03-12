@@ -1,0 +1,18 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+html, body {
+    overflow: hidden; /*  Disable scrollbars */
+    display: block; /* No floating content on sides */
+}
+body {
+    background: #000;
+}
+
+#screen {
+    display: block;
+    image-rendering: pixelated;
+    height: 100vh;
+    margin: auto;
+}
