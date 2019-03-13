@@ -18,13 +18,14 @@ export function createBackgroundLayer(level: Level, tiles: Matrix, sprites: Spri
 
     for (let x = startIndex; x <= endIndex; ++x) {
       const col = tiles.grid[x];
-      if (col)
+      if (col) {
         col.forEach((tile, y) => {
           if (sprites.animations.has(tile.name))
             sprites.drawAnim(tile.name, context, x - startIndex, y, level.totalTime);
           else
             sprites.drawTile(tile.name, context, x - startIndex, y);
         });
+      }
     }
   }
 

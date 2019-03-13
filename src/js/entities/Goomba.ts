@@ -45,10 +45,7 @@ export class Goomba extends Entity implements IEnemy {
 
 class Behavior extends Trait {
   collides(us: Goomba, them: Mario /* fixme: refactor */) {
-    if (us.killable.dead) {
-      return;
-    }
-
+    if (us.killable.dead) return;
     if (them.stomper) {
       if (them.vel.y > us.vel.y) {
         us.killable.kill();

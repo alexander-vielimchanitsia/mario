@@ -81,10 +81,7 @@ class Behavior extends Trait {
   }
 
   collides(us: Koopa, them: Mario) {
-    if (us.killable.dead) {
-      return;
-    }
-
+    if (us.killable.dead) return;
     if (them.stomper) {
       if (them.vel.y > us.vel.y) {
         this.handleStomp(us, them);

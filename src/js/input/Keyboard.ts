@@ -19,23 +19,20 @@ export class Keyboard {
 
   handleEvent(event: KeyboardEvent) {
     const {code} = event;
-
-    if (!this.keyHandlers.has(code))
-      return;
+    if (!this.keyHandlers.has(code)) return;
 
     event.preventDefault();
 
     const keyState = event.type === 'keydown' ? KeyState.PRESSED : KeyState.RELEASED;
-
-    if (this.keyStates.get(code) === keyState)
-      return;
+    if (this.keyStates.get(code) === keyState) return;
 
     this.keyStates.set(code, keyState);
     this.keyHandlers.get(code)(keyState);
   }
 
   listenTo(element: HTMLElement | Window) {
-    for (const eventName of ['keydown', 'keyup'])
+    for (const eventName of ['keydown', 'keyup']) {
       element.addEventListener(eventName, (event: KeyboardEvent) => this.handleEvent(event));
+    }
   }
 }
