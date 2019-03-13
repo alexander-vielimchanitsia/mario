@@ -1,6 +1,5 @@
 import BoundingBox from "../BoundingBox";
 import { Side } from "../constants";
-import { PlayerEnv } from "../game";
 import Level from "../Level";
 import { Vector2 } from "../math";
 import SpriteSheet from "../SpriteSheet";

@@ -28,18 +28,15 @@ export default class Level {
   }
 
   update(deltaTime: number) {
-    this.entities.forEach(entity => {
+    for (const entity of this.entities) {
       entity.update(deltaTime, this);
-    });
-
-    this.entities.forEach(entity => {
+    }
+    for (const entity of this.entities) {
       this.entityCollider.check(entity);
-    });
-
-    this.entities.forEach(entity => {
+    }
+    for (const entity of this.entities) {
       entity.finalize();
-    });
-
+    }
     this.totalTime += deltaTime;
   }
 }

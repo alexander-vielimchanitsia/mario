@@ -30,7 +30,6 @@ class Game {
   constructor(canvasId='screen') {
     this.canvas = <HTMLCanvasElement>document.getElementById(canvasId);
     this.ctx = this.canvas.getContext('2d');
-    // this.qualitySetup();
     // noinspection JSIgnoredPromiseFromCall
     this.start();
   }
@@ -60,25 +59,6 @@ class Game {
 
     timer.start();
   }
-
-  // qualitySetup() {
-  //   const devicePixelRatio = window.devicePixelRatio || 1;
-  //   // noinspection JSUnresolvedVariable
-  //   const backingStoreRatio = this.ctx.webkitBackingStorePixelRatio
-  //                          || this.ctx.mozBackingStorePixelRatio
-  //                          || this.ctx.msBackingStorePixelRatio
-  //                          || this.ctx.oBackingStorePixelRatio
-  //                          || this.ctx.backingStorePixelRatio
-  //                          || 1;
-  //   const ratio = devicePixelRatio / backingStoreRatio;
-  //   const width = this.canvas.width;
-  //   const height = this.canvas.height;
-  //   this.canvas.width = width * ratio;
-  //   this.canvas.height = height * ratio;
-  //   this.canvas.style.width = width + 'px';
-  //   this.canvas.style.height = height + 'px';
-  //   this.ctx.scale(ratio, ratio);
-  // }
 }
 
 window.addEventListener('DOMContentLoaded', () => {

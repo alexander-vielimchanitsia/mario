@@ -5,7 +5,7 @@ export interface ISpriteSpec {
   readonly animations: IAnimationSpriteSpec[];
   readonly tileW: number;
   readonly tileH: number;
-  readonly tiles: ITileSpriteSpec;
+  readonly tiles: ITileSpriteSpec[];
 }
 
 export interface IFrameSpriteSpec {

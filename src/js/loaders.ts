@@ -1,6 +1,6 @@
 import { createAnimation } from './animation';
 import SpriteSheet from './SpriteSheet';
-import { IAnimationSpriteSpec, IFrameSpriteSpec, ITileSpriteSpec } from "./typings/sprites";
+import { IAnimationSpriteSpec, IFrameSpriteSpec, ISpriteSpec, ITileSpriteSpec } from './typings/sprites';
 
 // todo: use a decorator instead?
 // const IMAGE_CACHE = {} as any;
@@ -27,43 +27,44 @@ export function loadImage(url: string) {
 
 export function loadJSON(url: string) {
   return fetch(url)
-    .then(r => r.json());
+  .then(r => r.json());
 }
 
 export function loadSpriteSheet(name: string) {
   return loadJSON(`/src/sprites/${name}.json`)
-    .then(sheetSpec => Promise.all([
-      sheetSpec,
-      loadImage(sheetSpec.imageURL),
-    ]))
-    .then(([sheetSpec, image]) => {
-      const sprites = new SpriteSheet(
-        <HTMLImageElement>image,
-        sheetSpec.tileW,
-        sheetSpec.tileH);
+  .then((sheetSpec: ISpriteSpec) => Promise.all([
+    sheetSpec,
+    loadImage(sheetSpec.imageURL),
+  ]))
+  .then(([sheetSpec, image]) => {
+    const sprites = new SpriteSheet(
+      <HTMLImageElement>image,
+      sheetSpec.tileW,
+      sheetSpec.tileH);
 
-      if (sheetSpec.tiles) {
-        sheetSpec.tiles.forEach((tileSpec: ITileSpriteSpec) => {
-          sprites.defineTile(
-            tileSpec.name,
-            tileSpec.index[0],
-            tileSpec.index[1]);
-        });
+    if (sheetSpec.tiles) {
+      for (const tileSpec of (<ISpriteSpec>sheetSpec).tiles) {
+        sprites.defineTile(
+          tileSpec.name,
+          tileSpec.index[0],
+          tileSpec.index[1]
+        );
       }
+    }
 
-      if (sheetSpec.frames) {
-        sheetSpec.frames.forEach((frameSpec: IFrameSpriteSpec) => {
-          sprites.define(frameSpec.name, frameSpec.rect[0], frameSpec.rect[1], frameSpec.rect[2], frameSpec.rect[3]);
-        });
+    if (sheetSpec.frames) {
+      for (const frameSpec of (<ISpriteSpec>sheetSpec).frames) {
+        sprites.define(frameSpec.name, frameSpec.rect[0], frameSpec.rect[1], frameSpec.rect[2], frameSpec.rect[3]);
       }
+    }
 
-      if (sheetSpec.animations) {
-        sheetSpec.animations.forEach((animSpec: IAnimationSpriteSpec) => {
-          const animation = createAnimation(animSpec.frames, animSpec.frameLen);
-          sprites.defineAnim(animSpec.name, animation);
-        });
+    if (sheetSpec.animations) {
+      for (const animSpec of (<ISpriteSpec>sheetSpec).animations) {
+        const animation = createAnimation(animSpec.frames, animSpec.frameLen);
+        sprites.defineAnim(animSpec.name, animation);
       }
+    }
 
-      return sprites;
-    });
+    return sprites;
+  });
 }

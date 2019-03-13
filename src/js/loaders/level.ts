@@ -30,11 +30,13 @@ const ENTITIES: {[name: string]: any} = {
 };
 
 function setupEntities(levelSpec: ILevelSpec, level: Level) {
-  // fixme: call loadSprite without blocking (do Promise.all for all sprites at once)
-  levelSpec.entities.forEach(async ({name, pos: [x, y]}) => {
-    const entity = new ENTITIES[name](await ENTITIES[name].loadSprite());
-    entity.pos.set(x, y);
-    level.entities.add(entity);
+  const spriteLoads = levelSpec.entities.map(({name}) => ENTITIES[name].loadSprite());
+  Promise.all([...spriteLoads]).then((sprites) => {
+    levelSpec.entities.forEach(({name, pos: [x, y]}, i) => {
+      const entity = new ENTITIES[name](sprites[i]);
+      entity.pos.set(x, y);
+      level.entities.add(entity);
+    });
   });
 
   const spriteLayer = createSpriteLayer(level.entities);
@@ -45,19 +47,19 @@ function setupEntities(levelSpec: ILevelSpec, level: Level) {
 export function createLevelLoader() {
   return function loadLevel(name: string) {
     return loadJSON(`/src/levels/${name}.json`)
-      .then(levelSpec => Promise.all([
-        levelSpec,
-        loadSpriteSheet(levelSpec.spriteSheet),
-      ]))
-      .then(([levelSpec, backgroundSprites]) => {
-        const level = new Level();
+    .then(levelSpec => Promise.all([
+      levelSpec,
+      loadSpriteSheet(levelSpec.spriteSheet),
+    ]))
+    .then(([levelSpec, backgroundSprites]) => {
+      const level = new Level();
 
-        setupCollision(levelSpec, level);
-        setupBackgrounds(levelSpec, level, backgroundSprites);
-        setupEntities(levelSpec, level);
+      setupCollision(levelSpec, level);
+      setupBackgrounds(levelSpec, level, backgroundSprites);
+      setupEntities(levelSpec, level);
 
-        return level;
-      });
+      return level;
+    });
   }
 }
 
