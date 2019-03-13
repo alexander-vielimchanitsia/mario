@@ -25,9 +25,10 @@ export default class TileCollider {
       entity.bounds.top, entity.bounds.bottom
     );
 
-    matches.forEach(match => {
+    for (const match of matches) {
       if (match.tile.type !== 'ground') {
-        return;
+        // todo: write test for it
+        continue;
       }
 
       if (entity.vel.x > 0) {
@@ -39,7 +40,7 @@ export default class TileCollider {
           entity.obstruct(Side.Left, match);
         }
       }
-    });
+    }
   }
 
   checkY(entity: Entity) {
@@ -54,11 +55,13 @@ export default class TileCollider {
 
     const matches = this.tiles.searchByRange(
       entity.bounds.left, entity.bounds.right,
-      y, y);
+      y, y
+    );
 
-    matches.forEach(match => {
+    for (const match of matches) {
       if (match.tile.type !== 'ground') {
-        return;
+        // todo: write test for it
+        continue;
       }
 
       if (entity.vel.y > 0) {
@@ -70,6 +73,6 @@ export default class TileCollider {
           entity.obstruct(Side.Top, match);
         }
       }
-    });
+    }
   }
 }
