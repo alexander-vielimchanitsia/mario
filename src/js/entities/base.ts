@@ -7,7 +7,6 @@ import { Trait } from "../traits/base";
 import { TileResolverMatch } from "../typings/core";
 
 export abstract class Entity {
-  sprite: SpriteSheet;
   pos: Vector2;
   vel: Vector2;
   size: Vector2;
@@ -16,8 +15,7 @@ export abstract class Entity {
   lifetime: number;
   traits: Trait[];
 
-  protected constructor(sprite: SpriteSheet) {
-    this.sprite = sprite;
+  protected constructor(public sprite: SpriteSheet) {
     this.pos = new Vector2(0, 0);
     this.vel = new Vector2(0, 0);
     this.size = new Vector2(0, 0);
@@ -27,6 +25,8 @@ export abstract class Entity {
 
     this.traits = [];
   }
+
+  abstract get currentSpriteName(): string;
 
   addTrait(trait: Trait) {
     this.traits.push(trait);
@@ -46,9 +46,7 @@ export abstract class Entity {
     });
   }
 
-  draw(context: CanvasRenderingContext2D) {
-
-  }
+  draw(context: CanvasRenderingContext2D) {}
 
   finalize() {
     this.traits.forEach(trait => {

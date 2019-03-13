@@ -14,33 +14,21 @@ const FAST_DRAG = 1/5000;
 export class Mario extends Entity {
   runAnimation: (distance: number) => string;
 
-  // TODO: get rid of it... use inheritance or mixins or something yet..
-  // TODO: like: `class Mario extends Entity implements Physics, Go, Jump, ...`
-  physics: Physics;
-  solid: Solid;
-  go: Go;
-  jump: Jump;
-  killable: Killable;
-  stomper: Stomper;
+  // Traits
+  // =========================
+  public physics = new Physics(this);
+  public solid = new Solid(this);
+  public go = new Go(this);
+  public jump = new Jump(this);
+  public killable = new Killable(this);
+  public stomper = new Stomper(this);
+  // =========================
 
   constructor(sprite: SpriteSheet) {
     super(sprite);
     this.size.set(14, 16);
-
-    // Traits
-    // =========================
-    this.physics = new Physics(this);
-    this.solid = new Solid(this);
-    this.go = new Go(this);
-    this.jump = new Jump(this);
-    this.killable = new Killable(this);
-    this.stomper = new Stomper(this);
-    // =========================
-
     this.killable.removeAfter = 0;
-
     this.runAnimation = sprite.animations.get('run');
-
     this.turbo(false);
   }
 
@@ -48,7 +36,7 @@ export class Mario extends Entity {
     return loadSpriteSheet('mario');
   }
 
-  routeFrame() {
+  get currentSpriteName(): string {
     if (this.jump.falling) {
       return 'jump';
     }
@@ -69,6 +57,6 @@ export class Mario extends Entity {
   }
 
   draw(context: CanvasRenderingContext2D) {
-    this.sprite.draw(this.routeFrame(), context, 0, 0, this.go.heading < 0);
+    this.sprite.draw(this.currentSpriteName, context, 0, 0, this.go.heading < 0);
   }
 }

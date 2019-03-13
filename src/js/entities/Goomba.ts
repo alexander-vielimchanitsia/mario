@@ -9,23 +9,6 @@ import { IEnemy } from "../typings/entities";
 import { Entity } from "./base";
 import { Mario } from "./Mario";
 
-class Behavior extends Trait {
-  collides(us: Goomba, them: Mario /* fixme: refactor */) {
-    if (us.killable.dead) {
-      return;
-    }
-
-    if (them.stomper) {
-      if (them.vel.y > us.vel.y) {
-        us.killable.kill();
-        us.pendulumMove.speed = 0;
-      } else {
-        them.killable.kill();
-      }
-    }
-  }
-}
-
 export class Goomba extends Entity implements IEnemy {
   readonly walkAnimation: (distance: number) => string;
 
@@ -48,8 +31,7 @@ export class Goomba extends Entity implements IEnemy {
     return loadSpriteSheet('goomba');
   }
 
-  routeAnim() {
-
+  get currentSpriteName(): string {
     if (this.killable.dead) {
       return 'flat';
     }
@@ -57,6 +39,23 @@ export class Goomba extends Entity implements IEnemy {
   }
 
   draw(context: CanvasRenderingContext2D) {
-    this.sprite.draw(this.routeAnim(), context, 0, 0);
+    this.sprite.draw(this.currentSpriteName, context, 0, 0);
+  }
+}
+
+class Behavior extends Trait {
+  collides(us: Goomba, them: Mario /* fixme: refactor */) {
+    if (us.killable.dead) {
+      return;
+    }
+
+    if (them.stomper) {
+      if (them.vel.y > us.vel.y) {
+        us.killable.kill();
+        us.pendulumMove.speed = 0;
+      } else {
+        them.killable.kill();
+      }
+    }
   }
 }
