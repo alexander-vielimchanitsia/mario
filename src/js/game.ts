@@ -4,7 +4,6 @@ import Camera from './Camera';
 import { Entity } from './entities/base';
 import { Mario } from "./entities/Mario";
 import { setupKeyboard } from './input/setup';
-import { createCollisionLayer } from './layers/collision';
 import { createDashboardLayer } from './layers/dashboard';
 import { loadFont } from './loaders/font';
 import { createLevelLoader } from './loaders/level';
@@ -47,8 +46,6 @@ class Game {
     const playerEnv = new PlayerEnv(mario);
     level.entities.add(playerEnv);
 
-
-    level.comp.layers.push(createCollisionLayer(level));
     level.comp.layers.push(createDashboardLayer(await loadFont(), playerEnv));
 
     const input = setupKeyboard(mario);

@@ -1,5 +1,6 @@
 import BoundingBox from "../BoundingBox";
 import { Side } from "../constants";
+import { PlayerEnv } from "../game";
 import Level from "../Level";
 import { Vector2 } from "../math";
 import SpriteSheet from "../SpriteSheet";
@@ -26,7 +27,7 @@ export abstract class Entity {
     this.traits = [];
   }
 
-  abstract get currentSpriteName(): string;
+  // abstract get currentSpriteName(): string;  TODO: use it after refactored PlayerEnv
 
   addTrait(trait: Trait) {
     this.traits.push(trait);
