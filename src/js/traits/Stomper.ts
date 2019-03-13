@@ -19,9 +19,8 @@ export default class Stomper extends Trait {
 
   // TODO: use an interface(like Enemy | Character) instead of Mario
   collides(us: Mario, them: Mario) {
-    if (!them.killable || them.killable.dead) {
+    if (!them.killable || them.killable.dead)
       return;
-    }
 
     if (us.vel.y > them.vel.y) {
       this.bounce(us, them);

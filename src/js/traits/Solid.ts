@@ -12,9 +12,8 @@ export default class Solid extends Trait {
   }
 
   obstruct(entity: Entity, side: Side, match: TileResolverMatch) {
-    if (!this.obstructs) {
+    if (!this.obstructs)
       return;
-    }
 
     if (side === Side.Bottom) {
       entity.bounds.bottom = match.y1;

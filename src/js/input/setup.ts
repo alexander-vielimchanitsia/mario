@@ -5,11 +5,10 @@ export function setupKeyboard(mario: Mario) {
   const input = new Keyboard();
 
   input.addMapping('KeyP', (keyState: number) => {
-    if (keyState) {
+    if (keyState)
       mario.jump.start();
-    } else {
+    else
       mario.jump.cancel();
-    }
   });
 
   input.addMapping('KeyO', (keyState: number) => {

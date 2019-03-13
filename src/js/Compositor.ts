@@ -8,8 +8,7 @@ export default class Compositor {
   }
 
   draw(context: CanvasRenderingContext2D, camera: Camera) {
-    for (const layer of this.layers) {
+    for (const layer of this.layers)
       layer(context, camera);
-    }
   }
 }

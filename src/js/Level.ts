@@ -28,16 +28,12 @@ export default class Level {
   }
 
   update(deltaTime: number) {
-    for (const entity of this.entities) {
+    for (const entity of this.entities)
       entity.update(deltaTime, this);
-    }
-    for (const entity of this.entities) {
+    for (const entity of this.entities)
       this.entityCollider.check(entity);
-    }
-    for (const entity of this.entities) {
+    for (const entity of this.entities)
       entity.finalize();
-    }
     this.totalTime += deltaTime;
   }
 }
-

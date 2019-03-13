@@ -30,35 +30,32 @@ export abstract class Entity {
 
   addTrait(trait: Trait) {
     this.traits.push(trait);
-    // FIXME: implement it somehow
-    // this[trait.constructor.name] = trait;
   }
 
   collides(candidate: Entity) {
-    this.traits.forEach(trait => {
+    for (const trait of this.traits) {
       trait.collides(this, candidate);
-    });
+    }
   }
 
   obstruct(side: Side, match: TileResolverMatch) {
-    this.traits.forEach(trait => {
+    for (const trait of this.traits) {
       trait.obstruct(this, side, match);
-    });
+    }
   }
 
   draw(context: CanvasRenderingContext2D) {}
 
   finalize() {
-    this.traits.forEach(trait => {
+    for (const trait of this.traits) {
       trait.finalize();
-    });
+    }
   }
 
   update(deltaTime: number, level: Level) {
-    this.traits.forEach(trait => {
+    for (const trait of this.traits) {
       trait.update(this, deltaTime, level);
-    });
-
+    }
     this.lifetime += deltaTime;
   }
 }

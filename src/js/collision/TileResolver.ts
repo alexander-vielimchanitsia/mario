@@ -51,14 +51,14 @@ export default class TileResolver {
 
   searchByRange(x1: number, x2: number, y1: number, y2: number): TileResolverMatch[] {
     const matches: TileResolverMatch[] = [];
-    this.toIndexRange(x1, x2).forEach(indexX => {
-      this.toIndexRange(y1, y2).forEach(indexY => {
+    for (const indexX of this.toIndexRange(x1, x2)) {
+      for (const indexY of this.toIndexRange(y1, y2)) {
         const match = this.getByIndex(indexX, indexY);
         if (match) {
           matches.push(match);
         }
-      });
-    });
+      }
+    }
     return matches;
   }
 }

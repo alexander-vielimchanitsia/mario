@@ -35,10 +35,7 @@ export class Keyboard {
   }
 
   listenTo(element: HTMLElement | Window) {
-    ['keydown', 'keyup'].forEach(eventName => {
-      element.addEventListener(eventName, (event: KeyboardEvent) => {
-        this.handleEvent(event);
-      });
-    });
+    for (const eventName of ['keydown', 'keyup'])
+      element.addEventListener(eventName, (event: KeyboardEvent) => this.handleEvent(event));
   }
 }

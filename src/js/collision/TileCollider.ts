@@ -12,13 +12,12 @@ export default class TileCollider {
 
   checkX(entity: Entity) {
     let x;
-    if (entity.vel.x > 0) {
+    if (entity.vel.x > 0)
       x = entity.bounds.right;
-    } else if (entity.vel.x < 0) {
+    else if (entity.vel.x < 0)
       x = entity.bounds.left;
-    } else {
+    else
       return;
-    }
 
     const matches = this.tiles.searchByRange(
       x, x,
@@ -26,10 +25,8 @@ export default class TileCollider {
     );
 
     for (const match of matches) {
-      if (match.tile.type !== 'ground') {
-        // todo: write test for it
-        continue;
-      }
+      if (match.tile.type !== 'ground')
+        continue;  // todo: write test for it
 
       if (entity.vel.x > 0) {
         if (entity.bounds.right > match.x1) {
@@ -45,13 +42,12 @@ export default class TileCollider {
 
   checkY(entity: Entity) {
     let y;
-    if (entity.vel.y > 0) {
+    if (entity.vel.y > 0)
       y = entity.bounds.bottom;
-    } else if (entity.vel.y < 0) {
+    else if (entity.vel.y < 0)
       y = entity.bounds.top;
-    } else {
+    else
       return;
-    }
 
     const matches = this.tiles.searchByRange(
       entity.bounds.left, entity.bounds.right,
@@ -59,10 +55,8 @@ export default class TileCollider {
     );
 
     for (const match of matches) {
-      if (match.tile.type !== 'ground') {
-        // todo: write test for it
-        continue;
-      }
+      if (match.tile.type !== 'ground')
+        continue;  // todo: write test for it
 
       if (entity.vel.y > 0) {
         if (entity.bounds.bottom > match.y1) {

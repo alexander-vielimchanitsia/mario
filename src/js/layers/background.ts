@@ -18,15 +18,13 @@ export function createBackgroundLayer(level: Level, tiles: Matrix, sprites: Spri
 
     for (let x = startIndex; x <= endIndex; ++x) {
       const col = tiles.grid[x];
-      if (col) {
+      if (col)
         col.forEach((tile, y) => {
-          if (sprites.animations.has(tile.name)) {
+          if (sprites.animations.has(tile.name))
             sprites.drawAnim(tile.name, context, x - startIndex, y, level.totalTime);
-          } else {
+          else
             sprites.drawTile(tile.name, context, x - startIndex, y);
-          }
         });
-      }
     }
   }
 
@@ -36,8 +34,10 @@ export function createBackgroundLayer(level: Level, tiles: Matrix, sprites: Spri
     const drawTo = drawFrom + drawWidth;
     redraw(drawFrom, drawTo);
 
-    context.drawImage(buffer,
+    context.drawImage(
+      buffer,
       -camera.pos.x % 16,
-      -camera.pos.y);
+      -camera.pos.y
+    );
   };
 }
