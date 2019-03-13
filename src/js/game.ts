@@ -57,7 +57,7 @@ class Game {
     const timer = new Timer(1/60);
     timer.update = (deltaTime) => {
       level.update(deltaTime);
-      camera.pos.x = Math.max(0, mario.pos.x - 100);
+      camera.update(mario);
       level.comp.draw(this.ctx, camera);
     };
 
