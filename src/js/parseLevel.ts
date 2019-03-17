@@ -87,8 +87,7 @@ export function findAllAdjoiningTiles(
   let lastValidXLen = 0;
   let lastValidYLen = 0;
 
-  // TODO: refactor it to start from x=1 & y=1 (to skip checking first tile, which we've already got)
-  let xLen = 0;
+  let xLen = 1;
   let yLen = 0;
 
   while (xLen < maxX || yLen < maxY && matrix.get(x+xLen, y+yLen) === tile) {
