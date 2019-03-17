@@ -1,6 +1,6 @@
 import 'mocha';
 import {expect} from 'chai';
-import { Vector2 } from "../src/js/math";
+import { Vector2 } from "../../src/js/math";
 
 describe('Test `math.Vector2`', () => {
   it('check initialization', () => {

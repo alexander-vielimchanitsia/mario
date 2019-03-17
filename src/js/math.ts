@@ -1,13 +1,12 @@
-import { MatrixCell } from "./typings/core";
 
 export class Matrix {
-  grid: MatrixCell[][];
+  grid: any[][];
 
   constructor() {
     this.grid = [];
   }
 
-  forEach(callback: (value: MatrixCell, x: number, y: number) => void) {
+  forEach(callback: (value: any, x: number, y: number) => void) {
     this.grid.forEach((column, x) => {
       column.forEach((value, y) => {
         callback(value, x, y);
@@ -15,7 +14,7 @@ export class Matrix {
     });
   }
 
-  get(x: number, y: number) {
+  get(x: number, y: number): any {
     const col = this.grid[x];
     if (col) {
       return col[y];
@@ -23,11 +22,10 @@ export class Matrix {
     return undefined;
   }
 
-  set(x: number, y: number, value: MatrixCell) {
+  set(x: number, y: number, value: any) {
     if (!this.grid[x]) {
       this.grid[x] = [];
     }
-
     this.grid[x][y] = value;
   }
 }
