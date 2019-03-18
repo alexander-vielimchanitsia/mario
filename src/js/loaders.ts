@@ -27,7 +27,12 @@ export function loadImage(url: string) {
 
 export function loadJSON(url: string) {
   return fetch(url)
-  .then(r => r.json());
+  .then(response => response.json());
+}
+
+export function loadText(url: string) {
+  return fetch(url)
+  .then(response => response.text());
 }
 
 export function loadSpriteSheet(name: string) {

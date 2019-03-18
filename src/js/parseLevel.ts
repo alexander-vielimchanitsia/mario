@@ -46,14 +46,22 @@ export function parseLevel(levelMap: string): Matrix {
   let x = 0;
   let y = 0;
 
+  let longestLineLength = 0;
   while (1) {
     const tileAbbr = tilesMap.get(x, y);
     if (tileAbbr === MAP_END) {  // parsed whole the map
+      fillEmptySpaces(tilesMap, longestLineLength);
       // remove the end symbol out of the map
       tilesMap.remove(x, y);
       break;
     }
+    // go to the next line
     if (tileAbbr === undefined) {
+      // check longest line
+      if (x > longestLineLength) {
+        longestLineLength = x;
+      }
+
       x = 0;
       y++;
       continue;
@@ -169,4 +177,19 @@ export function identifySprite(
     startY: y,
     endY: y+lastValidYLen
   };
+}
+
+export function fillEmptySpaces(tilesMap: Matrix, longestLineLength: number) {
+  if (longestLineLength) {
+    let x = 0;
+    let y = 0;
+    for (; tilesMap.get(x, y) !== MAP_END; y++) {
+      for (; x < longestLineLength && tilesMap.get(x, y) !== MAP_END; x++) {
+        if (!tilesMap.get(x, y)) {
+          tilesMap.set(x, y, DEFAULT_TILE);
+        }
+      }
+      x = 0;
+    }
+  }
 }
