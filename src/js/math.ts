@@ -28,6 +28,12 @@ export class Matrix {
     }
     this.grid[x][y] = value;
   }
+
+  remove(x: number, y: number) {
+    if (this.grid[x]) {
+      this.grid[x].pop();
+    }
+  }
 }
 
 export class Vector2 {

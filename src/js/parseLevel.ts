@@ -48,8 +48,9 @@ export function parseLevel(levelMap: string): Matrix {
 
   while (1) {
     const tileAbbr = tilesMap.get(x, y);
-    if (tileAbbr === MAP_END) {
-      // parsed whole the map
+    if (tileAbbr === MAP_END) {  // parsed whole the map
+      // remove the end symbol out of the map
+      tilesMap.remove(x, y);
       break;
     }
     if (tileAbbr === undefined) {

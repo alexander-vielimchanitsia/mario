@@ -131,15 +131,15 @@ describe('Test parseLevel.setTile', () => {
 });
 
 describe('Test parseLevel.parseLevel', () => {
-  it('empty map - should return only MAP_END symbol', () => {
+  it('empty map', () => {
     const level = parseLevel('');
-    expect(level.grid).to.eql([[MAP_END]]);
+    expect(level.grid).to.eql([[]]);
   });
   it('map="#"', () => {
     const map = '#';
     const level = parseLevel(map);
     expect(level.get(0, 0)).to.eql(PATTERNS['#'].tiles['0:0']);
-    expect(level.get(1, 0)).to.equal(MAP_END);
+    expect(level.get(1, 0)).to.undefined;
   });
   it('map="||\\n||"', () => {
     const map = '||\n||';
