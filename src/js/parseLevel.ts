@@ -2,10 +2,10 @@ import { Matrix } from './math';
 import { IPattern, IPatterns, ITile } from './typings/level';
 import { isString } from './utils/common';
 
-const MAP_END = Symbol('mapEnd');
+export const MAP_END = Symbol('mapEnd');
 
 const DEFAULT_TILE = {'name': 'sky'};
-const PATTERNS: IPatterns = {
+export const PATTERNS: IPatterns = {
   ' ': {'tiles': {'0:0': {'name': 'sky'}}},
   '?': {'tiles': {'0:0': {'name': 'chance', 'type': 'ground'}}},
   '%': {'tiles': {'0:0': {'name': 'bricks', 'type': 'ground'}}},
@@ -87,7 +87,7 @@ export function setTile(
     return;
   }
 
-  const tilesPathToSet = findAllAdjoiningTiles(matrix, tileAbbr, pattern, x, y);
+  const tilesPathToSet = identifySprite(matrix, tileAbbr, pattern, x, y);
   if (!tilesPathToSet) {
     // TODO: set ERROR sprite?
     return;
@@ -100,7 +100,7 @@ export function setTile(
       if (!tile) continue;
       if (matrix.get(currentX, currentY) !== tileAbbr) {
         console.warn(
-          'Looks like something went wrong - trying to set tile of another' +
+          'Looks like something went wrong - trying to set tile of another tileAbbr. ' +
             `tileAbbr=${matrix.get(currentX, currentY)}, x=${currentY}, y=${currentY} tile:`,
           tile
         );
@@ -124,7 +124,7 @@ export function getTile(tileAbbr: string, pattern: IPattern, x: number, y: numbe
   return tile;
 }
 
-export function findAllAdjoiningTiles(
+export function identifySprite(
   matrix: Matrix,
   tileAbbr: string,
   pattern: IPattern,
@@ -136,12 +136,12 @@ export function findAllAdjoiningTiles(
   const maxY = pattern.maxY || 1;
   const minY = pattern.minY || 1;
 
-  let lastValidXLen = 0;
-  let lastValidYLen = 0;
   let xLen = 1;  // start from the next tile
   let yLen = 0;
+  let lastValidXLen = xLen;
+  let lastValidYLen = yLen;
 
-  while (xLen < maxX || yLen < maxY && matrix.get(x+xLen, y+yLen) === tileAbbr) {
+  while (xLen < maxX || yLen < maxY && matrix.get(x+xLen, y+yLen) === tileAbbr) {  // TODO: refactor it
     // find all adjoining tiles of the same type, in current line
     while (xLen < maxX  && matrix.get(x+xLen, y+yLen) === tileAbbr) {
       xLen++;
