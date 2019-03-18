@@ -1,6 +1,7 @@
 import 'mocha';
 import {expect} from 'chai';
-import { findAllAdjoiningTiles, IPattern, parseLevel } from '../../src/js/parseLevel';
+import { findAllAdjoiningTiles, getTile, mapToMatrix, parseLevel, setTile } from '../../src/js/parseLevel';
+import { IPattern } from '../../src/js/typings/level';
 
 const PATTERN: IPattern = {
   'maxX': 2,
@@ -8,10 +9,10 @@ const PATTERN: IPattern = {
   'maxY': Number.POSITIVE_INFINITY,
   'minY': 2,
   'tiles': {
-    '1:1': {'name': 'pipe-insert-vert-left', 'type': 'ground'},
-    '2:1': {'name': 'pipe-insert-vert-right', 'type': 'ground'},
-    '1:y': {'name': 'pipe-vert-left', 'type': 'ground'},
-    '2:y': {'name': 'pipe-vert-right', 'type': 'ground'},
+    '0:0': {'name': 'pipe-insert-vert-left', 'type': 'ground'},
+    '1:0': {'name': 'pipe-insert-vert-right', 'type': 'ground'},
+    '0:y': {'name': 'pipe-vert-left', 'type': 'ground'},
+    '1:y': {'name': 'pipe-vert-right', 'type': 'ground'},
   },
 };
 
@@ -22,7 +23,7 @@ describe('Test parseLevel.findAllAdjoiningTiles', () => {
     //VALID
     it('map="||\\n||" - should return return path to "||\\n||"', () => {
       const map = '||\n||';
-      const matrix = parseLevel(map);
+      const matrix = mapToMatrix(map);
       const x = 0;
       const y = 0;
       const res = findAllAdjoiningTiles(matrix, '|', PATTERN, x, y);
@@ -30,7 +31,7 @@ describe('Test parseLevel.findAllAdjoiningTiles', () => {
     });
     it('map="\\n||\\n|||" - should return return path to "||\\n||"', () => {
       const map = '\n||\n|||';
-      const matrix = parseLevel(map);
+      const matrix = mapToMatrix(map);
       const x = 0;
       const y = 1;
       const res = findAllAdjoiningTiles(matrix, '|', PATTERN, x, y);
@@ -38,7 +39,7 @@ describe('Test parseLevel.findAllAdjoiningTiles', () => {
     });
     it('map="||\\n||\\n||" - should return return path to "||\\n||\\n||"', () => {
       const map = '||\n||\n||';
-      const matrix = parseLevel(map);
+      const matrix = mapToMatrix(map);
       const x = 0;
       const y = 0;
       const res = findAllAdjoiningTiles(matrix, '|', PATTERN, x, y);
@@ -46,7 +47,7 @@ describe('Test parseLevel.findAllAdjoiningTiles', () => {
     });
     it('map="|||\\n|||" - should return return path to "||\\n||"', () => {
       const map = '|||\n|||';
-      const matrix = parseLevel(map);
+      const matrix = mapToMatrix(map);
       const x = 0;
       const y = 0;
       const res = findAllAdjoiningTiles(matrix, '|', PATTERN, x, y);
@@ -56,7 +57,7 @@ describe('Test parseLevel.findAllAdjoiningTiles', () => {
     //INVALID
     it('map="|" - should return return undefined', () => {
       const map = '|';
-      const matrix = parseLevel(map);
+      const matrix = mapToMatrix(map);
       const x = 0;
       const y = 0;
       const res = findAllAdjoiningTiles(matrix, '|', PATTERN, x, y);
@@ -64,7 +65,7 @@ describe('Test parseLevel.findAllAdjoiningTiles', () => {
     });
     it('map="||" - should return return undefined', () => {
       const map = '||';
-      const matrix = parseLevel(map);
+      const matrix = mapToMatrix(map);
       const x = 0;
       const y = 0;
       const res = findAllAdjoiningTiles(matrix, '|', PATTERN, x, y);
@@ -72,7 +73,7 @@ describe('Test parseLevel.findAllAdjoiningTiles', () => {
     });
     it('map="|\\n|" - should return return undefined', () => {
       const map = '|\n|';
-      const matrix = parseLevel(map);
+      const matrix = mapToMatrix(map);
       const x = 0;
       const y = 0;
       const res = findAllAdjoiningTiles(matrix, '|', PATTERN, x, y);
@@ -80,7 +81,7 @@ describe('Test parseLevel.findAllAdjoiningTiles', () => {
     });
     it('map="||\\n|" - should return return undefined', () => {
       const map = '||\n|';
-      const matrix = parseLevel(map);
+      const matrix = mapToMatrix(map);
       const x = 0;
       const y = 0;
       const res = findAllAdjoiningTiles(matrix, '|', PATTERN, x, y);
@@ -88,7 +89,7 @@ describe('Test parseLevel.findAllAdjoiningTiles', () => {
     });
     it('map="|\\n||" - should return return undefined', () => {
       const map = '|\n||';
-      const matrix = parseLevel(map);
+      const matrix = mapToMatrix(map);
       const x = 0;
       const y = 0;
       const res = findAllAdjoiningTiles(matrix, '|', PATTERN, x, y);
@@ -96,11 +97,45 @@ describe('Test parseLevel.findAllAdjoiningTiles', () => {
     });
     it('map="|\\n |" - should return return undefined', () => {
       const map = '|\n |';
-      const matrix = parseLevel(map);
+      const matrix = mapToMatrix(map);
       const x = 0;
       const y = 0;
       const res = findAllAdjoiningTiles(matrix, '|', PATTERN, x, y);
       expect(res).to.undefined;
     });
+  });
+});
+
+describe('Test parseLevel.getTile', () => {
+  it('find by direct address', () => {
+    expect(getTile('|', PATTERN, 0, 0)).to.eql(PATTERN.tiles['0:0']);
+    expect(getTile('|', PATTERN, 1, 0)).to.eql(PATTERN.tiles['1:0']);
+  });
+  it('find by direct x and any y address', () => {
+    expect(getTile('|', PATTERN, 0, 3)).to.eql(PATTERN.tiles['0:y']);
+    expect(getTile('|', PATTERN, 1, 5)).to.eql(PATTERN.tiles['1:y']);
+  });
+  it('try to find a nonexistent tile', () => {
+    expect(getTile('|', PATTERN, 2, 2)).to.undefined;
+  });
+});
+
+describe('Test parseLevel.setTile', () => {
+  it('map="||\\n||" - set tiles of "|" pattern', () => {
+    const map = '||\n||';
+    const matrix = mapToMatrix(map);
+    const res = setTile(matrix, 0, 0);
+    expect(res).to.eql({x: 2, y: 0});
+  });
+});
+
+describe('Test parseLevel.parseLevel', () => {
+  it('map="||\\n||"', () => {
+    const map = '||\n||';
+    const level = parseLevel(map);
+    expect(level.get(0, 0)).to.eql(PATTERN.tiles['0:0']);
+    expect(level.get(1, 0)).to.eql(PATTERN.tiles['1:0']);
+    expect(level.get(0, 1)).to.eql(PATTERN.tiles['0:y']);
+    expect(level.get(1, 1)).to.eql(PATTERN.tiles['1:y']);
   });
 });

@@ -28,3 +28,21 @@ export interface IEntityLevelSpec {
   readonly name: string;
   readonly pos: number[];
 }
+
+// parseLevel
+export interface IPatterns {
+  [tileId: string]: IPattern;
+}
+export interface IPattern {
+  maxX?: number;
+  minX?: number;
+  maxY?: number;
+  minY?: number;
+  tiles: {
+    [address: string]: ITile;
+  };
+}
+export interface ITile {
+  name: string;
+  type?: string;
+}
