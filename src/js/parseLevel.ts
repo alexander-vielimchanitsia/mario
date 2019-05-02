@@ -1,3 +1,7 @@
+import { Goomba } from './entities/Goomba';
+import { Koopa } from './entities/Koopa';
+import { Mario } from './entities/Mario';
+import Level, {PlayerEnv} from './Level';
 import { Matrix } from './math';
 import { IPattern, IPatterns, ITile } from './typings/level';
 import { isString } from './utils/common';
@@ -6,6 +10,7 @@ export const MAP_END = Symbol('mapEnd');
 
 const DEFAULT_TILE = {'name': 'sky'};
 export const PATTERNS: IPatterns = {
+  // TILES
   ' ': {'tiles': {'0:0': {'name': 'sky'}}},
   '?': {'tiles': {'0:0': {'name': 'chance', 'type': 'ground'}}},
   '%': {'tiles': {'0:0': {'name': 'bricks', 'type': 'ground'}}},
@@ -22,6 +27,39 @@ export const PATTERNS: IPatterns = {
       '1:y': {'name': 'pipe-vert-right', 'type': 'ground'},
     },
   },
+  // ENTITIES
+  'G': {
+    'handler': async (level: Level, tilesMap: Matrix, x: number, y: number) => {
+      const sprites = await Goomba.loadSprite();
+      const entity = new Goomba(sprites);
+      entity.pos.set(x*16, y*16);
+      level.entities.add(entity);
+      tilesMap.set(x, y, DEFAULT_TILE);
+      return {x: x+1, y};
+    },
+  },
+  'K': {
+    'handler': async (level: Level, tilesMap: Matrix, x: number, y: number) => {
+      const sprites = await Koopa.loadSprite();
+      const entity = new Koopa(sprites);
+      entity.pos.set(x*16, y*16);
+      level.entities.add(entity);
+      tilesMap.set(x, y, DEFAULT_TILE);
+      return {x: x+1, y};
+    },
+  },
+  'M': {
+    'handler': async (level: Level, tilesMap: Matrix, x: number, y: number) => {
+      const mario = new Mario(await Mario.loadSprite());
+      mario.pos.set(x*16, y*16);
+
+      level.playerEnv = new PlayerEnv(mario);
+      level.entities.add(level.playerEnv);
+
+      tilesMap.set(x, y, DEFAULT_TILE);
+      return {x: x+1, y};
+    },
+  }
 };
 
 export function mapToMatrix(levelMap: string): Matrix {
@@ -41,7 +79,7 @@ export function mapToMatrix(levelMap: string): Matrix {
   return tilesMap;
 }
 
-export function parseLevel(levelMap: string): Matrix {
+export async function parseLevel(level: Level, levelMap: string): Promise<Matrix> {
   const tilesMap = mapToMatrix(levelMap);
   let x = 0;
   let y = 0;
@@ -67,7 +105,7 @@ export function parseLevel(levelMap: string): Matrix {
       continue;
     }
 
-    const result = setTile(tilesMap, x, y);
+    const result = await handleTile(level, tilesMap, x, y);
     // set path of the next tile
     if (result) {
       x = result.x;
@@ -79,11 +117,12 @@ export function parseLevel(levelMap: string): Matrix {
   return tilesMap;
 }
 
-export function setTile(
+export async function handleTile(
+  level: Level,
   matrix: Matrix,
   x: number,
   y: number
-): {x: number, y: number} | undefined {
+): Promise<{x: number, y: number} | undefined> {
   const tileAbbr = matrix.get(x, y);
   // already set a tile
   if (tileAbbr && !isString(tileAbbr)) return;
@@ -92,6 +131,18 @@ export function setTile(
 
   // set default tile if it isn't specified
   if (!pattern) {
+    matrix.set(x, y, DEFAULT_TILE);
+    return;
+  }
+
+  // has own handler?
+  if (pattern.handler) {
+    return await pattern.handler(level, matrix, x, y);
+  }
+
+  if (!pattern.tiles) {
+    console.warn(`No tiles specified for tileAbbr="${tileAbbr}"`);
+    // TODO: set ERROR sprite instead?
     matrix.set(x, y, DEFAULT_TILE);
     return;
   }

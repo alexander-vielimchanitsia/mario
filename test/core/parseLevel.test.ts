@@ -1,6 +1,6 @@
 import 'mocha';
 import {expect} from 'chai';
-import { identifySprite, getTile, mapToMatrix, parseLevel, setTile, MAP_END, PATTERNS } from '../../src/js/parseLevel';
+import { identifySprite, getTile, mapToMatrix, parseLevel, handleTile, MAP_END, PATTERNS } from '../../src/js/parseLevel';
 
 // TODO: does it make sense to automate the test cases? :-/
 // TODO: like to have an object of specified test cases, and only one function to test (iterating by the object)
@@ -115,35 +115,35 @@ describe('Test parseLevel.getTile', () => {
   });
 });
 
-describe('Test parseLevel.setTile', () => {
+describe('Test parseLevel.handleTile', () => {
   it('map="||\\n||" - set tiles of "|" pattern', () => {
     const map = '||\n||';
     const matrix = mapToMatrix(map);
-    const res = setTile(matrix, 0, 0);
+    const res = handleTile(null, matrix, 0, 0);
     expect(res).to.eql({x: 2, y: 0});
   });
   it('map="#" - set tile of "#" pattern', () => {
     const map = '#';
     const matrix = mapToMatrix(map);
-    const res = setTile(matrix, 0, 0);
+    const res = handleTile(null, matrix, 0, 0);
     expect(res).to.eql({x: 1, y: 0});
   });
 });
 
 describe('Test parseLevel.parseLevel', () => {
-  it('empty map', () => {
-    const level = parseLevel('');
+  it('empty map', async () => {
+    const level = await parseLevel(null,'');
     expect(level.grid).to.eql([[]]);
   });
-  it('map="#"', () => {
+  it('map="#"', async () => {
     const map = '#';
-    const level = parseLevel(map);
+    const level = await parseLevel(null, map);
     expect(level.get(0, 0)).to.eql(PATTERNS['#'].tiles['0:0']);
     expect(level.get(1, 0)).to.undefined;
   });
-  it('map="||\\n||"', () => {
+  it('map="||\\n||"', async () => {
     const map = '||\n||';
-    const level = parseLevel(map);
+    const level = await parseLevel(null, map);
     expect(level.get(0, 0)).to.eql(PATTERNS['|'].tiles['0:0']);
     expect(level.get(1, 0)).to.eql(PATTERNS['|'].tiles['1:0']);
     expect(level.get(0, 1)).to.eql(PATTERNS['|'].tiles['0:y']);

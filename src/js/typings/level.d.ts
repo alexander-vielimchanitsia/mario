@@ -1,3 +1,5 @@
+import Level from '../Level';
+import { Matrix } from '../math';
 
 export interface ILevelSpec {
   readonly spriteSheet: string;
@@ -38,9 +40,10 @@ export interface IPattern {
   minX?: number;
   maxY?: number;
   minY?: number;
-  tiles: {
+  tiles?: {
     [address: string]: ITile;
   };
+  handler?: (level: Level, tilesMap: Matrix, x: number, y: number) => Promise<{x: number, y: number} | undefined>;
 }
 export interface ITile {
   name: string;

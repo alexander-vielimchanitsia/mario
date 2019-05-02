@@ -20,7 +20,6 @@ export default class PlayerController extends Trait {
 
   setPlayer(entity: Mario) {
     this.player = entity;
-
     this.player.stomper.onStomp = () => {
       this.score += 100;
     }

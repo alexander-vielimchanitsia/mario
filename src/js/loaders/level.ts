@@ -28,15 +28,13 @@ function setupEntities(levelSpec: ILevelSpec, level: Level) {
 
 export function createLevelLoader() {
   return function loadLevel(name: string) {
+    const level = new Level();
     return loadText(`/src/levels/${name}.txt`)
     .then(levelMap => Promise.all([
-      levelMap,
+      parseLevel(level, levelMap),
       loadSpriteSheet('overworld'),
     ]))
-    .then(([levelMap, backgroundSprites]) => {
-      const level = new Level();
-      const parsedLevel = parseLevel(levelMap);
-
+    .then(([parsedLevel, backgroundSprites]) => {
       // setup collision
       level.setCollisionGrid(parsedLevel);
 

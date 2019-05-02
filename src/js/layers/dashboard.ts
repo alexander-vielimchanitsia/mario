@@ -1,4 +1,4 @@
-import { PlayerEnv } from "../game";
+import { PlayerEnv } from '../Level';
 import { Font } from "../loaders/font";
 
 export function createDashboardLayer(font: Font, playerEnv: PlayerEnv) {

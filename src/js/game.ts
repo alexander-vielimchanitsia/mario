@@ -1,25 +1,11 @@
 import '../css/main.css';
 
 import Camera from './Camera';
-import { Entity } from './entities/base';
-import { Mario } from "./entities/Mario";
 import { setupKeyboard } from './input/setup';
 import { createDashboardLayer } from './layers/dashboard';
 import { loadFont } from './loaders/font';
 import { createLevelLoader } from './loaders/level';
 import Timer from './Timer';
-import PlayerController from './traits/PlayerController';
-
-export class PlayerEnv extends Entity {
-  playerController: PlayerController;
-
-  constructor(playerEntity: Mario) {
-    super(null);
-    this.playerController = new PlayerController(this);
-    this.playerController.checkpoint.set(64, 64);
-    this.playerController.setPlayer(playerEntity);
-  }
-}
 
 // TODO: audio: http://www.mariouniverse.com/wp-content/audio/sfx/smb/
 
@@ -40,20 +26,15 @@ class Game {
 
     const camera = new Camera();
 
-    const mario = new Mario(await Mario.loadSprite());
+    level.comp.layers.push(createDashboardLayer(await loadFont(), level.playerEnv));
 
-    const playerEnv = new PlayerEnv(mario);
-    level.entities.add(playerEnv);
-
-    level.comp.layers.push(createDashboardLayer(await loadFont(), playerEnv));
-
-    const input = setupKeyboard(mario);
+    const input = setupKeyboard(level.playerEnv.playerController.player);
     input.listenTo(window);
 
     const timer = new Timer(1/60);
     timer.update = (deltaTime) => {
       level.update(deltaTime);
-      camera.update(mario);
+      camera.update(level.playerEnv.playerController.player);
       level.comp.draw(this.ctx, camera);
     };
 
